@@ -28,6 +28,7 @@
  *---------------------------------------------------------------------
  */
 
+#ifndef PICO_DOOM
 #include "SDL.h"
 #include "SDL_thread.h"
 
@@ -644,3 +645,4 @@ void I_CaptureFinish (void)
     remove (cap_tempfile2);
   }
 }
+#endif

@@ -431,12 +431,13 @@ void D_Display (fixed_t frac)
     D_Wipe();
   }
 
+#ifndef PICO_DOOM
   // e6y
   // Don't thrash cpu during pausing or if the window doesnt have focus
   if ( (paused && !walkcamera.type) || (!window_focused) ) {
     I_uSleep(5000);
   }
-
+#endif
   I_EndDisplay();
 }
 
@@ -492,6 +493,7 @@ static void D_DoomLoop(void)
       // Update display, next frame, with current state.
       if (!movement_smooth || !WasRenderedInTryRunTics || gamestate != wipegamestate)
       {
+        #ifndef PICO_DOOM
         // NSM
         if (capturing_video && !doSkip)
         {
@@ -510,6 +512,7 @@ static void D_DoomLoop(void)
           cap_frac -= FRACUNIT + cap_step;
         }
         else
+        #endif
         {
           D_Display(I_GetTimeFrac());
         }

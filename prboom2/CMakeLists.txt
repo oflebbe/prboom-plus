@@ -1,8 +1,10 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.12)
+
+include(pico_sdk_import.cmake)
 
 project("PrBoom-Plus"
     VERSION 2.6.1
-    HOMEPAGE_URL "https://github.com/coelckers/prboom-plus")
+    HOMEPAGE_URL "https://github.com/coelckers/prboom-plus" LANGUAGES C CXX )
 
 # Set a default build type if none was specified
 set(default_build_type "RelWithDebInfo")
@@ -15,17 +17,19 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
 
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+pico_sdk_init()
+add_definitions(-DPICO_DOOM)
+# set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-include(TargetArch)
+#include(TargetArch)
 
-include(TestBigEndian)
-TEST_BIG_ENDIAN(WORDS_BIGENDIAN)
+#include(TestBigEndian)
+#TEST_BIG_ENDIAN(WORDS_BIGENDIAN)
 
-include(GNUInstallDirs)
+#include(GNUInstallDirs)
 
 # Automated dependencies discovery, mostly needed for MSVC
-target_architecture(TARGET_ARCH)
+#target_architecture(TARGET_ARCH)
 if(${TARGET_ARCH} MATCHES "i386")
     set(DEPENDENCY_SUFFIX x86)
 elseif(${TARGET_ARCH} MATCHES "x86_64")
@@ -79,7 +83,7 @@ if(BUILD_GL)
     find_package(OpenGL)
 endif()
 
-find_package(SDL2 2.0.7 REQUIRED)
+#find_package(SDL2 2.0.7 REQUIRED)
 
 option(WITH_IMAGE "Use SDL2_image if available" ON)
 if(WITH_IMAGE)
@@ -215,7 +219,7 @@ endif()
 
 if(CMAKE_CROSSCOMPILING)
     set(IMPORT_EXECUTABLES "IMPORTFILE-NOTFOUND" CACHE FILEPATH "Export file from native build")
-    include(${IMPORT_EXECUTABLES})
+    # include(${IMPORT_EXECUTABLES})
 else()
     if(NOT CROSS_EXPORTS)
         set(CROSS_EXPORTS "")

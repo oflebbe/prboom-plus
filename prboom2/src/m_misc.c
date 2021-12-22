@@ -75,8 +75,10 @@
 #include "r_things.h"
 #include "r_sky.h"
 
+#ifndef PICO_DOOM
 //e6y
 #include "gl_struct.h"
+#endif
 #include "g_overflow.h"
 #include "e6y.h"
 #ifdef USE_WINDOWS_LAUNCHER
@@ -241,7 +243,6 @@ static int gl_fog_color;
 static int gl_finish;
 static int gl_clear;
 static int gl_ztrick;
-
 // dummy variables for !GL_DOOM declared in gl_struct.h
 int gl_use_display_lists;
 int gl_sprite_offset_default;
@@ -250,7 +251,6 @@ int gl_mask_sprite_threshold;
 int gl_skymode;
 int gl_allow_detail_textures;
 int gl_detail_maxdist;
-spriteclipmode_t gl_spriteclip;
 int gl_spriteclip_threshold;
 int gl_sprites_frustum_culling;
 int gl_boom_colormaps_default;
@@ -263,17 +263,13 @@ int gl_texture_hqresize;
 int gl_texture_hqresize_textures;
 int gl_texture_hqresize_sprites;
 int gl_texture_hqresize_patches;
-motion_blur_params_t motion_blur;
-gl_lightmode_t gl_lightmode_default;
 int gl_light_ambient;
 int useglgamma;
 int gl_color_mip_levels;
-simple_shadow_params_t simple_shadows;
 int gl_shadows_maxdist;
 int gl_shadows_factor;
 int gl_blend_animations;
-spritefuzzmode_t gl_thingspritefuzzmode;
-spritefuzzmode_t gl_weaponspritefuzzmode;
+
 
 #endif
 
@@ -426,6 +422,7 @@ default_t defaults[] =
   {"comp_skytransfers",{&comp_skytransfers},{0},0,1,def_bool,ss_comp},
 
   {"Sound settings",{NULL},{0},UL,UL,def_none,ss_none},
+#ifndef PICO_DOOM
   {"snd_pcspeaker",{&snd_pcspeaker},{0}, 0, 1, def_bool,ss_none},
   {"sound_card",{&snd_card},{-1},-1,7,       // jff 1/18/98 allow Allegro drivers
    def_int,ss_none}, // select sounds driver (DOS), -1 is autodetect, 0 is none; in Linux, non-zero enables sound
@@ -461,7 +458,7 @@ default_t defaults[] =
   {"mus_fluidsynth_reverb",{&mus_fluidsynth_reverb},{0},0,1,def_bool,ss_none},
   {"mus_fluidsynth_gain",{&mus_fluidsynth_gain},{50},0,1000,def_int,ss_none}, // NSM  fine tune fluidsynth output level
   {"mus_opl_gain",{&mus_opl_gain},{50},0,1000,def_int,ss_none}, // NSM  fine tune opl output level
-
+#endif
   {"Video settings",{NULL},{0},UL,UL,def_none,ss_none},
   {"videomode",{NULL, &default_videomode},{0,"8bit"},UL,UL,def_str,ss_none},
   /* 640x480 default resolution */
@@ -498,7 +495,7 @@ default_t defaults[] =
    RDRAW_MASKEDCOLUMNEDGE_SQUARE, RDRAW_MASKEDCOLUMNEDGE_SLOPED, def_int,ss_none},
   {"patch_edges",{(int*)&drawvars.patch_edges},{RDRAW_MASKEDCOLUMNEDGE_SQUARE},
    RDRAW_MASKEDCOLUMNEDGE_SQUARE, RDRAW_MASKEDCOLUMNEDGE_SLOPED, def_int,ss_none},
-
+#ifndef PICO_DOOM
   {"OpenGL settings",{NULL},{0},UL,UL,def_none,ss_none},
   {"gl_compatibility", {&gl_compatibility},  {0},0,1,
    def_bool,ss_stat},
@@ -590,7 +587,7 @@ default_t defaults[] =
   {"mouseb_use", {&mousebuse},{-1},-1,MAX_MOUSEB,
    def_int,ss_keys}, // mouse button number to use for using doors/switches
   //jff 3/8/98 end of lower range change for -1 allowed in mouse binding
-
+#endif
   {"mb_weapon1",{&mb_weapon1},{-1},-1,MAX_MOUSEB,
   def_int,ss_keys}, // mouse button to switch to weapon 1 (fist/chainsaw)
   {"mb_weapon2",{&mb_weapon2},{-1},-1,MAX_MOUSEB,
@@ -771,6 +768,7 @@ default_t defaults[] =
    0,MAX_KEY,def_key,ss_keys}, // key to take a screenshot
 
   {"Joystick settings",{NULL},{0},UL,UL,def_none,ss_none},
+#ifndef PICO_DOOM
   {"use_joystick",{&usejoystick},{0},0,2,
    def_int,ss_none}, // number of joystick to use (0 for none)
   {"joy_left",{&joyleft},{0},  UL,UL,def_int,ss_none},
@@ -789,7 +787,7 @@ default_t defaults[] =
    def_int,ss_keys}, // joystick button number to use for running
   {"joyb_use",{&joybuse},{3},0,UL,
    def_int,ss_keys}, // joystick button number to use for use/open
-
+#endif
   {"Chat macros",{NULL},{0},UL,UL,def_none,ss_none},
   {"chatmacro0", {0,&chat_macros[0]}, {0,HUSTR_CHATMACRO0},UL,UL,
    def_str,ss_chat}, // chat string associated with 0 key
@@ -1053,7 +1051,7 @@ default_t defaults[] =
    def_int,ss_stat},
   {"health_bar_green", {&health_bar_green}, {0},0,100,
    def_int,ss_stat},
-
+#ifndef PICO_DOOM
   // NSM
   {"Video capture encoding settings",{NULL},{0},UL,UL,def_none,ss_none},
   {"cap_soundcommand",{NULL, &cap_soundcommand},{0,"ffmpeg -f s16le -ar %s -ac 2 -i - -c:a libopus -y temp_a.nut"},UL,UL,def_str,ss_none},
@@ -1063,10 +1061,12 @@ default_t defaults[] =
   {"cap_tempfile2",{NULL, &cap_tempfile2},{0,"temp_v.nut"},UL,UL,def_str,ss_none},
   {"cap_remove_tempfiles", {&cap_remove_tempfiles},{1},0,1,def_bool,ss_none},
   {"cap_fps", {&cap_fps},{60},16,300,def_int,ss_none},
-
+#endif
   {"Prboom-plus video settings",{NULL},{0},UL,UL,def_none,ss_none},
+  #ifndef PICO_DOOM
   {"sdl_video_window_pos", {NULL,&sdl_video_window_pos}, {0,"center"},UL,UL,
    def_str,ss_none},
+  #endif
   {"palette_ondamage", {&palette_ondamage},  {1},0,1,
    def_bool,ss_stat},
   {"palette_onbonus", {&palette_onbonus},  {1},0,1,
@@ -1095,7 +1095,7 @@ default_t defaults[] =
    def_bool,ss_none},
   {"sprites_doom_order", {&sprites_doom_order}, {DOOM_ORDER_STATIC},0,DOOM_ORDER_LAST - 1,
    def_int,ss_stat},
-
+#ifndef PICO_DOOM
   {"movement_mouselook", {&movement_mouselook},  {0},0,1,
    def_bool,ss_stat},
   {"movement_mousenovert", {&movement_mousenovert},  {0},0,1,
@@ -1179,7 +1179,7 @@ default_t defaults[] =
       def_int, ss_none},
   {"gl_weaponspritefuzzmode",{(int*)&gl_weaponspritefuzzmode},{fuzz_darken},fuzz_darken,fuzz_last-1,
       def_int, ss_none},
-
+#endif
   {"Prboom-plus emulation settings",{NULL},{0},UL,UL,def_none,ss_none},
   {"overrun_spechit_warn", {&overflows[OVERFLOW_SPECHIT].warn},  {0},0,1,
    def_bool,ss_stat},

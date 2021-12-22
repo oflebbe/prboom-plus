@@ -22,7 +22,7 @@
 //	System interface for PC speaker sound.
 //
 //-----------------------------------------------------------------------------
-
+#ifndef PICO_DOOM
 #include "SDL.h"
 
 #include "doomdef.h"
@@ -38,7 +38,9 @@
 
 static dboolean pcs_initialised = false;
 
+
 static SDL_mutex *sound_lock;
+
 
 static const uint8_t *current_sound_lump = NULL;
 static const uint8_t *current_sound_pos = NULL;
@@ -235,3 +237,4 @@ void I_PCS_InitSound(void)
     sound_lock = SDL_CreateMutex();
 }
 
+#endif

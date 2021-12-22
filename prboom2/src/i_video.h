@@ -54,8 +54,10 @@ extern int render_vsync;
 extern int render_screen_multiply;
 extern int integer_scaling;
 
+#ifndef PICO_DOOM
 extern SDL_Window *sdl_window;
 extern SDL_Renderer *sdl_renderer;
+#endif
 
 extern const char *screen_resolutions_list[];
 extern const char *screen_resolution;
