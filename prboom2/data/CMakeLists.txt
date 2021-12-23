@@ -363,7 +363,7 @@ set(WAD_CMDLINE
 
 add_custom_command(
     OUTPUT "${WAD_DATA_PATH}"
-    COMMAND rdatawad -I "${CMAKE_CURRENT_SOURCE_DIR}" ${WAD_CMDLINE} -o "${WAD_DATA_PATH}"
+    COMMAND ./rdatawad -I "${CMAKE_CURRENT_SOURCE_DIR}" ${WAD_CMDLINE} -o "${WAD_DATA_PATH}"
     DEPENDS rdatawad ${WAD_SRC}
 )
 add_custom_target(prboomwad DEPENDS ${WAD_DATA_PATH})

@@ -71,8 +71,8 @@ static void ShowOverflowWarning(overrun_list_t overflow, int fatal, const char *
 
     static const char *name[OVERFLOW_MAX] = {
       "SPECHIT", "REJECT", "INTERCEPT", "PLYERINGAME", "DONUT", "MISSEDBACKSIDE"};
-
-    static const char str1[] =
+    // Somehow the PICO_SDK is allergic to the name str1 ...
+    static const char str11[] =
       "Too big or not supported %s overflow has been detected. "
       "Desync or crash can occur soon "
       "or during playback with the vanilla engine in case you're recording demo.%s%s";
@@ -89,7 +89,7 @@ static void ShowOverflowWarning(overrun_list_t overflow, int fatal, const char *
     overflows[overflow].promted = true;
 
     sprintf(buffer,
-      (fatal ? str1 : (EMULATE(overflow) ? str2 : str3)), 
+      (fatal ? str11 : (EMULATE(overflow) ? str2 : str3)),
       name[overflow],
       "\nYou can change PrBoom behaviour for this overflow through in-game menu.",
       params);

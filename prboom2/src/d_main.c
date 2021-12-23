@@ -517,7 +517,7 @@ static void D_DoomLoop(void)
           D_Display(I_GetTimeFrac());
         }
       }
-
+      #ifndef PICO_DOOM
       // CPhipps - auto screenshot
       if (auto_shot_fname && !--auto_shot_count) {
   auto_shot_count = auto_shot_time;
@@ -535,6 +535,7 @@ static void D_DoomLoop(void)
         M_DoScreenShot(avi_shot_curr_fname);
         free(avi_shot_curr_fname);
       }
+      #endif
 }
 }
 

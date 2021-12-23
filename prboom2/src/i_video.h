@@ -109,6 +109,7 @@ void I_UpdateRenderSize(void);	// Handle potential
 extern int renderW;		// resolution scaling
 extern int renderH;		// - DTIED
 
+#ifndef PICO_DOOM
 // Set the process affinity mask so that all threads
 extern int process_affinity_mask;
 // Priority class for the prboom-plus process
@@ -116,5 +117,6 @@ extern int process_priority;
 
 extern dboolean window_focused;
 void UpdateGrab(void);
+#endif 
 
 #endif
